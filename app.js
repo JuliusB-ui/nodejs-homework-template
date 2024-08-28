@@ -1,8 +1,12 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// const express = require('express')
+import express from "express";
+// const logger = require('morgan')
+import logger from "morgan";
+// const cors = require('cors')
+import cors from "cors";
 
-const contactsRouter = require('./routes/api/contacts')
+// const contactsRouter = require('./routes/api/contacts')
+import {router as contactsRouter} from "./routes/api/contacts.js";
 
 const app = express()
 
@@ -22,4 +26,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
 
-module.exports = app
+export {app};
