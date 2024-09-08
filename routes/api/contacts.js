@@ -1,26 +1,82 @@
-// const express = require('express')
 import express from "express"
+import {listContacts, getContactById, removeContact, addContact, updateContact} from '../../models/contacts.js';
+import { httpError } from "../../helper/httpError.js";
+import { contactValidation } from "../../validations/validations.js";
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.get('/', async (_req, res, next) => {
+  try {
+    const result = await listContacts();
+    res.json(result)
+  } catch (error) {
+    next(error);
+  }
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { contactId } = req.params;
+    const result = await getContactById(contactId);
+
+    if(!result) {
+      throw httpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 })
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = contactValidation.validate(req.body);
+    if (error) {
+      throw httpError(400, "missing required name field");
+    }
+
+    const result = await addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { contactId } = req.params;
+    const result = await removeContact(contactId);
+
+    if (!result) {
+      throw httpError(404);
+    }
+
+    res.json({
+      message: "Contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  try {
+    const { error } = contactValidation.validate(req.body);
+    if (error) {
+      throw httpError(400, "missing fields");
+    }
+
+    const { contactId } = req.params;
+    const result = await updateContact(contactId, req.body);
+
+    if (!result) {
+      throw httpError(404);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export {router}
