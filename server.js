@@ -1,4 +1,4 @@
-import app from "./app.js";
+import {app} from "./app.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
@@ -12,4 +12,8 @@ mongoose.connect(DB_HOST).then(()=>{
   });
   console.log("Database connect successful")
 })
+.catch((err) => {
+  console.log(`Server not running. Error message: ${err.message}`);
+  process.exit(1);
+});
 
