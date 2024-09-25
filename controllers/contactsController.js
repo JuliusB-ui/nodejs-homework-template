@@ -1,6 +1,6 @@
 import { Contact } from "../models/contactsModel.js";
 // prettier-ignore
-import { contactValidation, favoriteValidation } from "../validations/validations.js";
+import { contactValidation, favoriteValidation } from "../validations/validation.js";
 import { httpError } from "../helpers/httpError.js";
 
 const getAllContacts = async (req, res) => {
@@ -26,6 +26,7 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+  // Preventing lack of necessary data for contacts (check validations folder)
   const { error } = contactValidation.validate(req.body);
 
   if (error) {
@@ -51,6 +52,7 @@ const deleteContactById = async (req, res) => {
 };
 
 const updateContactById = async (req, res) => {
+  // Preventing lack of necessary data for contacts (check validations folder)
   const { error } = contactValidation.validate(req.body);
   if (error) {
     throw httpError(400, "missing fields");
@@ -69,6 +71,7 @@ const updateContactById = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
+  // Preventing lack of necessary data for favorite (check validations folder)
   const { error } = favoriteValidation.validate(req.body);
   if (error) {
     throw httpError(400, "missing field favorite");
