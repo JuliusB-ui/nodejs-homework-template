@@ -52,6 +52,6 @@ router.get("/verify/:verificationToken", ctrlWrapper(verifyEmail));
   "email": "example@example.com",
 }
 */
-router.post("/verify", authenticateToken, ctrlWrapper(resendVerifyEmail));
+router.post("/verify", ctrlWrapper(resendVerifyEmail));
 
 export { router };
